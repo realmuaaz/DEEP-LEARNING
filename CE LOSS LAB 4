@@ -1,0 +1,44 @@
+import numpy as np
+
+# Ground truth labels (one-hot encoded)
+y_true = np.array([
+    [1, 0, 0, 0, 0],  # Sample 1: Class 1
+    [0, 1, 0, 0, 0],  # Sample 2: Class 2
+    [0, 0, 1, 0, 0],   # Sample 3: Class 3
+    [0, 0, 0, 1, 0],  # Sample 2: Class 2
+    [0, 0, 0, 0, 1],
+])
+
+# Model predictions (logits)
+logits = np.array([
+    [2.0, 1.0, 0.1, 0.3, 1.5],  # Sample 1
+    [0.5, 2.5, 0.2, 1.5, 1.0],  # Sample 2
+    [0.1, 0.2, 3.0, 0.4, 5.0],   # Sample 3
+    [0.5, 0.2, 3.5, 0.8, 1.0],
+    [0.4, 2.2, 3.5, 1.4, 2.0], 
+])
+
+# Softmax function
+def softmax(x):
+    exp_x = np.exp(x - np.max(x, axis=-1, keepdims=True))  # Numerical stability
+    return exp_x / np.sum(exp_x, axis=-1, keepdims=True)
+
+# Compute softmax probabilities
+probs = softmax(logits)
+print("Softmax Probabilities:\n", probs)
+
+# Compute log(probs)
+log_probs = np.log(probs)
+print("\nLog of Softmax Probabilities:\n", log_probs)
+
+# Compute y_true * log(probs)
+y_true_log_probs = y_true * log_probs
+print("\ny_true * log(probs):\n", y_true_log_probs)
+
+# Compute CE loss for each sample
+ce_loss = -np.sum(y_true_log_probs, axis=-1)
+print("\nCE Loss per Sample:", ce_loss)
+
+# Average CE loss for the dataset
+avg_ce_loss = np.mean(ce_loss)
+print("\nAverage CE Loss for the Dataset:", avg_ce_loss)
