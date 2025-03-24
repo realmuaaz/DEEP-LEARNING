@@ -1,0 +1,170 @@
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Given values
+A1 = np.array([[0.10]])
+W2 = np.array([[0.20]])
+W3 = np.array([[0.30]])
+b2 = np.array([[0.0]])
+b3 = np.array([[0.0]])
+
+R = np.array([[0.01]])
+
+# Learning rate
+alpha = 0.4
+
+# Sigmoid activation function and its derivative
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
+def sigmoid_derivative(x):
+    return sigmoid(x) * (1 - sigmoid(x))
+
+# Number of epochs
+epochs = 5
+
+# Initialize an array to store total errors
+errors = np.zeros(epochs)
+
+# Loop through epochs
+for epoch in range(epochs):
+    print(f"\nEpoch {epoch + 1}:")
+
+    # Forward pass calculations
+    Z2 = np.dot(W2, A1) + b2
+    A2 = sigmoid(Z2)
+
+    Z3 = np.dot(W3, A2) + b3
+    A3 = sigmoid(Z3)
+
+    # Print forward pass values
+    print(f"Z2: {Z2}")
+    print(f"A2: {A2}")
+    print(f"Z3: {Z3}")
+    print(f"A3: {A3}")
+    print(f"W2: {W2}")
+    print(f"W3: {W3}")
+    print(f"b2: {b2}")
+    print(f"b3: {b3}")
+
+    # Calculate Deltas
+    D3 = (A3 - R) * sigmoid_derivative(Z3)
+    D2 = np.dot(W3.T, D3) * sigmoid_derivative(Z2)
+
+    # Print deltas
+    print(f"D3: {D3}")
+    print(f"D2: {D2}")
+
+    # Calculate gradients
+    grad_W3 = np.dot(D3, A2.T)
+    grad_b3 = D3
+    grad_W2 = np.dot(D2, A1.T)
+    grad_b2 = D2
+
+    # Print gradients
+    print(f"grad_W3: {grad_W3}")
+    print(f"grad_b3: {grad_b3}")
+    print(f"grad_W2: {grad_W2}")
+    print(f"grad_b2: {grad_b2}")
+
+    # Update weights and biases
+    W2 = W2 - alpha * grad_W2
+    b2 = b2 - alpha * grad_b2
+
+    W3 = W3 - alpha * grad_W3
+    b3 = b3 - alpha * grad_b3
+
+    # Calculate total error and store in array
+    total_error = np.sum((A3 - R) ** 2)
+    errors[epoch] = total_error
+
+# Plot the graph of total errors
+plt.figure()
+plt.plot(range(1, epochs + 1), errors, '-o')
+plt.xlabel('Epochs')
+plt.ylabel('Total Error')
+plt.title('Total Error vs. Epochs')
+plt.grid(True)
+plt.show()
+
+
+Epoch 1:
+Z2: [[0.02]]
+A2: [[0.50499983]]
+Z3: [[0.15149995]]
+A3: [[0.53780271]]
+W2: [[0.2]]
+W3: [[0.3]]
+b2: [[0.]]
+b3: [[0.]]
+D3: [[0.13119642]]
+D2: [[0.00983875]]
+grad_W3: [[0.06625417]]
+grad_b3: [[0.13119642]]
+grad_W2: [[0.00098387]]
+grad_b2: [[0.00983875]]
+
+Epoch 2:
+Z2: [[0.01602515]]
+A2: [[0.5040062]]
+Z3: [[0.08536629]]
+A3: [[0.52132862]]
+W2: [[0.19960645]]
+W3: [[0.27349833]]
+b2: [[-0.0039355]]
+b3: [[-0.05247857]]
+D3: [[0.12759955]]
+D2: [[0.00872401]]
+grad_W3: [[0.06431096]]
+grad_b3: [[0.12759955]]
+grad_W2: [[0.0008724]]
+grad_b2: [[0.00872401]]
+
+Epoch 3:
+Z2: [[0.01250065]]
+A2: [[0.50312512]]
+Z3: [[0.02114291]]
+A3: [[0.50528553]]
+W2: [[0.19925749]]
+W3: [[0.24777395]]
+b2: [[-0.0074251]]
+b3: [[-0.10351839]]
+D3: [[0.12380755]]
+D2: [[0.00766877]]
+grad_W3: [[0.06229069]]
+grad_b3: [[0.12380755]]
+grad_W2: [[0.00076688]]
+grad_b2: [[0.00766877]]
+
+Epoch 4:
+Z2: [[0.00940246]]
+A2: [[0.5023506]]
+Z3: [[-0.04108872]]
+A3: [[0.48972926]]
+W2: [[0.19895074]]
+W3: [[0.22285767]]
+b2: [[-0.01049261]]
+b3: [[-0.15304141]]
+D3: [[0.11988171]]
+D2: [[0.00667899]]
+grad_W3: [[0.06022265]]
+grad_b3: [[0.11988171]]
+grad_W2: [[0.0006679]]
+grad_b2: [[0.00667899]]
+
+Epoch 5:
+Z2: [[0.00670415]]
+A2: [[0.50167603]]
+Z3: [[-0.10127664]]
+A3: [[0.47470246]]
+W2: [[0.19868358]]
+W3: [[0.19876861]]
+b2: [[-0.01316421]]
+b3: [[-0.20099409]]
+D3: [[0.11587822]]
+D2: [[0.00575817]]
+grad_W3: [[0.05813333]]
+grad_b3: [[0.11587822]]
+grad_W2: [[0.00057582]]
+grad_b2: [[0.00575817]]
